@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎉HBD🎉</title>
+
+<style>
+html,body{
+  margin:0; 
+  height:100%;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at top,#f6f1e6,#d8cfb8 60%,#b9ad8a);
+  color:#2b2b2b;
+  font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
+}
+
+/* ===== LAYOUT ===== */
+
+section{
+  display:none;
+  height:100vh;
+  justify-content:center;
+  align-items:center;
+}
+
+section.active{display:flex}
+
+/* ===== GUILD WINDOW ===== */
+
+.frame{
+  width:92%;
+  max-width:420px;
+  padding:22px 20px 26px;
+  border-radius:18px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.85),rgba(245,238,220,.92));
+  border:2px solid rgba(160,140,90,.45);
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.18),
+    inset 0 0 12px rgba(255,255,255,.6);
+}
+
+/* ===== TEXT ===== */
+
+.text{
+  white-space:pre-wrap;
+  line-height:1.75;
+  min-height:3.2em;
+  font-size:16px;
+}
+
+.emphasis {
+  font-style: italic;
+  font-weight: bold;
+  letter-spacing: .03em;
+  animation: questReveal .6s ease-out;
+}
+
+@keyframes questReveal {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ===== SYSTEM / GOLD ===== */
+
+.system{
+  color:#7b5c1a;
+  font-weight:bold;
+}
+
+/* ===== BUTTONS ===== */
+
+.choice{
+  margin-top:16px;
+  padding:12px;
+  text-align:center;
+  border-radius:14px;
+  background:
+    linear-gradient(180deg,#fff,#eadfbf);
+  color:#3a2b10;
+  font-weight:bold;
+  cursor:pointer;
+  border:1px solid rgba(140,120,70,.6);
+  box-shadow:0 4px 10px rgba(0,0,0,.15);
+
+  /* 👇 NEW */
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  transition: opacity .35s ease, transform .35s ease;
+}
+
+.choice.show {
+  transition-delay: .35s;
+}
+
+.choice.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.choice:active{
+  transform:translateY(1px);
+  box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+
+/* ===== LIST ===== */
+
+.list{
+  margin-top:10px;
+  padding-left:1em;
+}
+
+/* ===== HINT ===== */
+
+.hint{
+  position:absolute;
+  bottom:18px;
+  font-size:13px;
+  opacity:.6;
+}
+
+/* ===== PAGE DOTS ===== */
+
+.dots{
+  position:fixed;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+}
+
+.dot{
+  width:7px;
+  height:7px;
+  background:#b9ad8a;
+  border-radius:50%;
+  margin:8px 0;
+}
+
+.dot.active{
+  background:#6f5a2a;
+}
+
+/* NEW tag */
+.new-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 6px;
+  font-size: 0.7em;
+  font-weight: bold;
+  color: #5a3a00;
+  background: linear-gradient(180deg, #ffeaa7, #f6c453);
+  border-radius: 6px;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+  opacity: 0;
+  animation: fadeInNew 0.6s ease forwards;
+}
+
+.list .text {
+  opacity: 0;
+  animation: skillFade 0.4s ease forwards;
+}
+
+@keyframes skillFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInNew {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 解放 glow */
+.unlock {
+  color: #ffd700;
+  font-weight: bold;
+  animation: unlockGlow 1.2s ease-out;
+}
+
+@keyframes unlockGlow {
+  0% {
+    text-shadow: 0 0 0 rgba(255,215,0,0);
+  }
+  50% {
+    text-shadow:
+      0 0 8px rgba(255,215,0,0.8),
+      0 0 16px rgba(255,215,0,0.6);
+  }
+  100% {
+    text-shadow: 0 0 0 rgba(255,215,0,0);
+  }
+
+/* ===== END BUTTON ===== */
+
+
+}
+
+</style>
+</head>
+
+<body>
+
+<audio id="bgm" src="audio/bgm.mp3" loop></audio>
+
+<div class="dots"></div>
+
+<!-- 0 -->
+<section class="active">
+  <div class="frame">
+    <div class="text" id="t0"></div>
+    <div class="choice" id="b0" onclick="next()">▶ 入る</div>
+  </div>
+  <div class="hint">▼ 音量を上げてください</div>
+</section>
+
+<!-- 1 -->
+<section>
+  <div class="frame">
+    <div class="text" id="t1"></div>
+    <div id="c1">
+      <div class="choice" onclick="next()">ステータスを確認する</div>
+      <div class="choice" onclick="next()">冒険者ランクを確認する</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section>
+  <div class="frame">
+    <div class="text system" id="t2"></div>
+    <div class="list">
+      <div class="text" id="l1"></div>
+      <div class="text" id="l2"></div>
+      <div class="text" id="l3"></div>
+    </div>
+    <div class="choice" id="b2" onclick="next()">▶ 次へ</div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section>
+  <div class="frame">
+    <div class="text system" id="t3"></div>
+    <div class="list">
+      <div class="text" id="skill1"></div>
+      <div class="text" id="skill2"></div>
+      <div class="text" id="skill3"></div>
+      <div class="text" id="skill4"></div>
+      <div class="text" id="skill5"></div>
+    </div>
+    <div class="choice" id="b3" onclick="next()">▶ 次へ</div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section>
+  <div class="frame">
+    <div class="text system" id="t4"></div>
+    <div class="list">
+      <div class="text" id="l5"></div>
+      <div class="text" id="l6"></div>
+      <div class="text" id="l7"></div> 
+    </div>  
+    <div id="c4">
+      <div class="choice" onclick="next()">▶ クエストを受ける</div>
+      <div class="choice" onclick="next()">▶ クエストを受ける</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<!-- 5 -->
+<section>
+  <div class="frame">
+    <div class="text" id="t5"></div>
+
+    <div class="end-buttons">
+      <div class="choice end-btn" id="endClose">▶ 閉じる</div>
+      <div class="choice end-btn" id="endRestart" style="display:none;">▶ もう一度見る</div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+const sections=[...document.querySelectorAll("section")];
+const dots=document.querySelector(".dots");
+let idx=0;
+
+sections.forEach(()=>dots.innerHTML+=`<div class="dot"></div>`);
+updateDots();
+
+function updateDots(){
+  [...dots.children].forEach((d,i)=>d.classList.toggle("active",i===idx));
+}
+
+const bgm=document.getElementById("bgm");
+
+function type(el,text,spd=140){
+  el.textContent="";
+  let n=0;
+  return new Promise(res=>{
+    function step(){
+      if(n>=text.length) return res();
+      const c=text[n];
+      if(Math.random()<.1 && c.match(/[ぁ-んァ-ン一-龯]/)){
+        el.textContent+="…";
+        setTimeout(()=>{
+          el.textContent=el.textContent.slice(0,-1)+c;
+          n++; setTimeout(step,spd);
+        },240);
+      }else{
+        el.textContent+=c;
+        n++; setTimeout(step,spd);
+      }
+    }
+    step();
+  });
+}
+
+function sleep(ms){
+  return new Promise(r => setTimeout(r, ms));
+}
+
+async function trigger(i){
+  if (i !== idx) return;
+
+  if(i===0){
+    await type(t0,"ギルドの扉が目の前にある。");
+    b0.classList.add("show");
+  }
+
+  if(i===1){
+    await type(t1,"こんにちは、今日は何の御用？");
+    new Audio("audio/gm.wav").play();
+    [...c1.children].forEach(b=>b.classList.add("show"));
+  }
+
+  if(i===2){
+    await type(t2, "ステータスを確認します。\n\n");
+    await type(l1, "名前: HARUHI TAKENOKO  \n");
+    await type(l2, "職業: STUDENT \n");
+    await type(l3, "ランク: 19 → 20 ");
+    enhanceUnlock(l3);
+    new Audio("audio/system_rankup.wav").play();
+    b2.classList.add("show");
+  }
+
+  if(i===3){
+    await type(t3,"新しいスキルを獲得しました。");
+    await type(skill1, "🍺 飲酒【解放】");
+    enhanceUnlock(skill1);
+    new Audio("audio/sake.wav").play();
+    await sleep(300);
+
+    await type(skill2, "🗳 投票【解放】");
+    enhanceUnlock(skill2);
+    await sleep(300);
+
+    await type(skill3, "📄 契約行為【解放】");
+    enhanceUnlock(skill3);
+    await sleep(300);
+
+    await type(skill4, "💳 金融スキル Lv.1");
+    enhanceUnlock(skill4);
+    await sleep(300);
+
+    await type(skill5, "⏰ 自由行動時間 拡張");
+    enhanceUnlock(skill5);
+    new Audio("audio/neru.wav").play();
+    await sleep(300);
+
+    b3.classList.add("show");
+  }
+
+  if(i===4){
+    await type(t4,
+`新クエスト発生！\n
+「大人として生きる」`);
+    enhanceUnlock(t4);
+    await type(l5,"\n難易度：不明\n");
+    await type(l6,"報酬：不明\n");
+    await type(l7,"制限時間：なし\n");
+    [...c4.children].forEach(b=>b.classList.add("show"));
+  }
+
+  if(i===5){
+  new Audio("audio/hbd.wav").play();
+  await type(
+    t5,
+    "20歳、おめでとう 🎉\n\n大人は、ゆっくりアンロックされます。"
+  );
+
+  document.body.style.overflow="auto";
+
+  // show end buttons
+  document.getElementById("endClose").classList.add("show");
+  document.getElementById("endRestart").classList.add("show");
+
+  document.getElementById("endClose").onclick = closePage;
+  document.getElementById("endRestart").onclick = restart;
+}
+
+}
+
+trigger(0);
+
+function enhanceUnlock(el) {
+  // glow 解放
+  el.innerHTML = el.innerHTML.replace(
+    /【解放】/g,
+    '<span class="unlock">【解放】</span>'
+  );
+
+  el.innerHTML = el.innerHTML.replace(
+    /20/g,
+    '<span class="unlock">20</span>'
+  );
+  el.innerHTML = el.innerHTML.replace(
+  /大人として生きる/g,
+  '<span class="emphasis">大人として生きる</span>'
+);
+
+  // NEW tag
+  const newTag = document.createElement("span");
+  newTag.className = "new-tag";
+  newTag.textContent = "NEW";
+  el.appendChild(newTag);
+}
+
+function closePage(){
+  // Try to close (works if opened by script)
+  window.close();
+
+  // Fallback: fade out + message
+  document.body.innerHTML =
+    "<div style='display:flex;height:100vh;align-items:center;justify-content:center;font-family:serif;opacity:.6;'>ご覧いただきありがとうございました</div>";
+}
+
+function restart(){
+  location.reload();
+}
+
+function next(){
+  if(idx===0){ bgm.volume=.35; bgm.play(); }
+  if(idx>=sections.length-1) return;
+  sections[idx].classList.remove("active");
+  idx++;
+  sections[idx].classList.add("active");
+  updateDots();
+  trigger(idx);
+}
+</script>
+
+</body>
+</html>
